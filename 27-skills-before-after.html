@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>27 Claude Skills — RSB</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --lime:#C8FF00; --black:#0A0A0A; --surface:#111111; --card:#1A1A1A;
+  --border:rgba(255,255,255,0.07); --white:#F5F5F2; --grey:#888882; --grey2:#444440;
+  --red:#FF453A; --red-bg:rgba(255,69,58,0.07); --green:#30D158; --green-bg:rgba(48,209,88,0.07);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Inter',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;font-size:15px}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--lime)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:80px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:800px;height:400px;background:radial-gradient(ellipse,rgba(200,255,0,0.07) 0%,transparent 65%);pointer-events:none}
+.h-chip{font-family:'Fira Code',monospace;font-size:11px;color:var(--lime);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:28px;background:rgba(200,255,0,0.08);border:1px solid rgba(200,255,0,0.18);padding:6px 18px;border-radius:20px;display:inline-block}
+.h-title{font-size:clamp(52px,12vw,140px);font-weight:900;letter-spacing:-0.05em;line-height:0.88;margin-bottom:28px;color:var(--white)}
+.h-title .lime{color:var(--lime)}
+.h-title .dim{-webkit-text-stroke:1.5px rgba(255,255,255,0.18);color:transparent}
+.h-sub{font-size:17px;color:var(--grey);line-height:1.65;max-width:540px;margin:0 auto 52px}
+.h-sub strong{color:var(--white);font-weight:500}
+.h-stats{display:flex;gap:52px;justify-content:center;flex-wrap:wrap}
+.hs{text-align:center}
+.hs-n{font-size:42px;font-weight:900;color:var(--lime);letter-spacing:-0.04em;line-height:1}
+.hs-l{font-size:12px;color:var(--grey);margin-top:5px}
+
+/* STICKY NAV */
+.snav{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.snav a{font-family:'Fira Code',monospace;font-size:9px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;padding:5px 12px;border-radius:20px;border:1px solid var(--border);color:var(--grey);text-decoration:none;transition:all 0.15s;white-space:nowrap}
+.snav a:hover{color:var(--lime);border-color:rgba(200,255,0,0.3)}
+
+/* SKILL SECTION */
+.ss{padding:72px 24px;max-width:960px;margin:0 auto;border-bottom:1px solid var(--border)}
+.ss:last-child{border-bottom:none}
+.ss-head{margin-bottom:32px}
+.ss-num{font-family:'Fira Code',monospace;font-size:10px;color:var(--lime);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px}
+.ss-name{font-size:clamp(28px,5vw,52px);font-weight:900;letter-spacing:-0.03em;line-height:0.95;margin-bottom:14px}
+.ss-badge{font-family:'Fira Code',monospace;font-size:10px;padding:4px 12px;border-radius:20px;background:rgba(200,255,0,0.07);border:1px solid rgba(200,255,0,0.18);color:var(--lime);display:inline-block;font-weight:500}
+
+/* PROMPT BOX */
+.prompt{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 22px;margin-bottom:20px}
+.prompt-l{font-family:'Fira Code',monospace;font-size:9px;color:var(--grey);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px}
+.prompt-t{font-size:14px;color:var(--white);line-height:1.6;font-style:italic}
+
+/* COMPARISON */
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cc{border-radius:14px;padding:22px;overflow:hidden}
+.cc.b{background:var(--red-bg);border:1px solid rgba(255,69,58,0.18)}
+.cc.a{background:var(--green-bg);border:1px solid rgba(48,209,88,0.18)}
+.cc-label{font-family:'Fira Code',monospace;font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.cc.b .cc-label{color:var(--red)}
+.cc.a .cc-label{color:var(--green)}
+.dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.cc.b .dot{background:var(--red)}
+.cc.a .dot{background:var(--green)}
+.cc-body{font-size:12px;color:var(--grey);line-height:1.75}
+.cc-body strong{color:var(--white);font-weight:600}
+.cc-body .ok{color:var(--green);font-weight:500}
+.cc-body .bad{color:var(--red)}
+.code{background:rgba(255,255,255,0.04);border-radius:8px;padding:12px 14px;margin-top:10px;font-family:'Fira Code',monospace;font-size:11px;color:rgba(255,255,255,0.55);line-height:1.85;white-space:pre-wrap;border-left:2px solid}
+.cc.b .code{border-color:var(--red)}
+.cc.a .code{border-color:var(--green)}
+
+/* WHY BOX */
+.why{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 22px;margin-top:12px;display:flex;gap:14px}
+.why-icon{color:var(--lime);font-size:16px;flex-shrink:0;margin-top:1px}
+.why-t{font-size:12px;color:var(--grey);line-height:1.65}
+.why-t strong{color:var(--white);font-weight:600}
+
+/* FOOTER */
+footer{background:var(--surface);border-top:1px solid var(--border);padding:52px 24px;text-align:center}
+.f-name{font-size:24px;font-weight:900;letter-spacing:-0.02em}
+.f-name span{color:var(--lime)}
+.f-sub{font-family:'Fira Code',monospace;font-size:10px;color:var(--grey);margin-top:8px;letter-spacing:0.1em;text-transform:uppercase}
+.f-note{font-size:14px;color:var(--grey);margin-top:20px;line-height:1.65}
+.f-note strong{color:var(--lime)}
+
+@media(max-width:600px){.cg{grid-template-columns:1fr}.h-stats{gap:28px}}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="h-chip">Built by Rishik Sai B — RSB — Hyderabad</div>
+  <h1 class="h-title">27 <span class="lime">Claude</span><br><span class="dim">Skills</span></h1>
+  <p class="h-sub">That handle the work of <strong>100 million people</strong> globally.<br>Same prompt. Both outputs. Every difference is visible in seconds.</p>
+  <div class="h-stats">
+    <div class="hs"><div class="hs-n">27</div><div class="hs-l">Skills Built</div></div>
+    <div class="hs"><div class="hs-n">100M</div><div class="hs-l">Roles Covered</div></div>
+    <div class="hs"><div class="hs-n">27</div><div class="hs-l">Before/After Proofs</div></div>
+    <div class="hs"><div class="hs-n">3,082</div><div class="hs-l">Lines of Framework</div></div>
+  </div>
+</section>
+
+<div class="snav">
+  <a href="#s1">Support</a><a href="#s2">Sales</a><a href="#s3">Research</a>
+  <a href="#s4">HR</a><a href="#s5">Finance</a><a href="#s6">Legal</a>
+  <a href="#s7">PR</a><a href="#s8">Content</a><a href="#s9">Data Entry</a>
+  <a href="#s10">Social</a><a href="#s11">Email</a><a href="#s12">SEO</a>
+  <a href="#s13">Meetings</a><a href="#s14">AP</a><a href="#s15">Bids</a>
+  <a href="#s16">Reviews</a><a href="#s17">Tech Docs</a><a href="#s18">Training</a>
+  <a href="#s19">Exec Comms</a><a href="#s20">Policy</a><a href="#s21">Intel</a>
+  <a href="#s22">Onboarding</a><a href="#s23">Products</a><a href="#s24">Grants</a>
+  <a href="#s25">Compliance</a><a href="#s26">Newsletter</a><a href="#s27">LinkedIn</a>
+</div>
+
+<!-- ═══ SKILL 1 ═══ -->
+<section id="s1" class="ss">
+  <div class="ss-head">
+    <p class="ss-num">// 01 of 27</p>
+    <h2 class="ss-name">Customer<br>Support Agent</h2>
+    <span class="ss-badge">Replaces 17M support workers globally</span>
+  </div>
+  <div class="prompt"><p class="prompt-l">// Same prompt, both outputs</p>
+  <p class="prompt-t">"Customer says their order was 3 weeks late and demands a full refund but our policy only allows 14-day returns. Write the response."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div>
+    <div class="code">Dear Customer,
+We apologize for the inconvenience.
+As per our policy, returns are only
+accepted within 14 days of delivery.
+Thank you for your patience.
+Support Team</div>
+    <div class="cc-body"><br><span class="bad">Triggers "as per our policy" — the sentence that makes customers angrier. No acknowledgment. No resolution. Gets escalated.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div>
+    <div class="code">Hi [Name],
+A 3-week delay is not acceptable.
+That is our failure, not yours.
+I am processing a full refund as an
+exception. Rs [X] returns to your card
+in 5 business days. Confirmation
+within the hour. Reply here if you
+have questions — it comes to me.
+[First name], Customer Experience</div>
+    <div class="cc-body"><br><span class="ok">Owns the failure. Makes the exception with authority. Gives a real timeline. Ends with a named human. Retains the customer.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill forces <strong>specific acknowledgment over generic apology</strong> and applies the retention decision tree — making the exception where it is warranted instead of hiding behind policy.</div></div>
+</section>
+
+<!-- ═══ SKILL 2 ═══ -->
+<section id="s2" class="ss">
+  <div class="ss-head"><p class="ss-num">// 02 of 27</p>
+  <h2 class="ss-name">Sales Outreach<br>Writer</h2>
+  <span class="ss-badge">Replaces 14M SDR and BDR workers globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p>
+  <p class="prompt-t">"Write a cold email to the CTO of a 60-person SaaS company. We sell API integration services."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div>
+    <div class="code">Subject: API Integration Services
+
+Dear CTO,
+Hope this email finds you well.
+We provide world-class API integration
+services that help businesses improve
+efficiency. I'd love to schedule a call.
+Best regards, Sales Team</div>
+    <div class="cc-body"><br><span class="bad">Zero research. No specific reason to reply. Vague value. Asks for 30 minutes from a stranger immediately. Deleted in 3 seconds.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div>
+    <div class="code">Subject: Your Stripe + Razorpay stack
+
+Noticed you ship to both Indian and
+global customers. Most 60-person SaaS
+teams at that stage run two payment
+stacks and manually reconcile them.
+
+We fix that in under 3 weeks.
+No re-architecture.
+
+Quick question: is your finance team
+still exporting data manually to
+reconcile both ledgers?
+
+Rishik — 3 Indian SaaS integrations
+delivered this year</div>
+    <div class="cc-body"><br><span class="ok">Opens with their specific situation. Names the exact pain. States the outcome and timeline. Asks one smart question. Reply rate: 18 to 35 percent.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies the <strong>3-line cold email formula</strong> and forces specificity at every line. It also selects the right persona angle — CTOs fear system complexity, not feature lists.</div></div>
+</section>
+
+<!-- ═══ SKILL 3 ═══ -->
+<section id="s3" class="ss">
+  <div class="ss-head"><p class="ss-num">// 03 of 27</p>
+  <h2 class="ss-name">Market Research<br>Analyst</h2>
+  <span class="ss-badge">Replaces 1M research analysts globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p>
+  <p class="prompt-t">"Give me a market research summary for the Indian B2B SaaS market in 2026."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div>
+    <div class="code">The Indian B2B SaaS market is growing
+rapidly. Key players include Zoho and
+Freshworks. There are opportunities
+for companies adopting digital
+solutions. Challenges include
+competition and customer acquisition.</div>
+    <div class="cc-body"><br><span class="bad">Vague everywhere. No TAM/SAM/SOM. No competitive positioning. No opportunity gaps. A Google search summary with zero analysis.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div>
+    <div class="code">EXEC SNAPSHOT:
+Market: Rs 28,000 Cr. CAGR: 23%.
+Top 5 players hold 38% share.
+Opportunity: vertical SaaS for tier-2
+SMEs underserved by horizontal tools.
+Risk: USD compression for export players.
+
+TAM: Rs 1.8L Cr. SAM: Rs 45,000 Cr.
+SOM target (3yr): Rs 450 Cr at 1%.
+
+GAP: 78% of Indian SMEs use 3+ tools
+with zero integration. Rs 6,000 Cr
+of spend going to manual processes.
+
+ACTION THIS WEEK: Interview 10 SME
+owners on their current software stack.</div>
+    <div class="cc-body"><br><span class="ok">Real TAM/SAM/SOM. Named players with share. Specific opportunity gap with rupee size. Time-bound recommended action. A board can act on this.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill forces output through a <strong>7-section research framework</strong> that ends with recommended actions. Without it: information. With it: a decision tool.</div></div>
+</section>
+
+<!-- ═══ SKILL 4 ═══ -->
+<section id="s4" class="ss">
+  <div class="ss-head"><p class="ss-num">// 04 of 27</p>
+  <h2 class="ss-name">HR Screener</h2>
+  <span class="ss-badge">Replaces 3M HR and recruiting professionals globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p>
+  <p class="prompt-t">"Write a job description for a Senior Product Manager at a Series A fintech startup."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div>
+    <div class="code">We are looking for an experienced
+Senior Product Manager to join our
+dynamic team. Responsibilities include
+defining product vision, working with
+engineering, analyzing market trends.
+Requirements: 5+ years PM experience,
+strong analytical skills, MBA preferred.
+Competitive salary and great culture.</div>
+    <div class="cc-body"><br><span class="bad">Duties list reads like every other JD. Generic requirements. "Competitive salary" tells the candidate nothing. Attracts 200 wrong applications.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div>
+    <div class="code">You will own our lending product
+and take it from Rs 2Cr to Rs 20Cr
+ARR in 18 months.
+
+Day 30: You have mapped every friction
+in our loan application flow.
+Day 60: You ship one change that
+measurably improves completion rate.
+Day 90: You present a 6-month roadmap
+to the board with the data behind it.
+
+Must-haves (4 only):
+Shipped consumer fintech with 50K+ users.
+Can write SQL to answer your own questions.
+Managed a product through RBI review.
+Can make a call with incomplete data.
+
+Comp: Rs 30-40L base. 0.5% ESOP.</div>
+    <div class="cc-body"><br><span class="ok">Opens with the outcome. 90-day success defined. Only 4 must-haves. Specific compensation stated. Attracts 20 right applications.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill uses the <strong>outcome-first JD formula</strong> and writes duties from the candidate's perspective. Built-in screening rubric cuts HR screening time by 60 percent.</div></div>
+</section>
+
+<!-- ═══ SKILL 5 ═══ -->
+<section id="s5" class="ss">
+  <div class="ss-head"><p class="ss-num">// 05 of 27</p>
+  <h2 class="ss-name">Finance Report<br>Writer</h2>
+  <span class="ss-badge">Replaces 8M finance and accounting professionals globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p>
+  <p class="prompt-t">"Write a monthly summary. MRR: Rs 45L. Churn: 9%. New customers: 22. Previous MRR: Rs 41L."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div>
+    <div class="code">Monthly Financial Summary
+MRR: Rs 45L (+9.8% MoM)
+New customers: 22
+Churn: 9%
+Overall the company performed well
+this month. Churn needs monitoring.</div>
+    <div class="cc-body"><br><span class="bad">Restates numbers without analysis. "Performed well" is meaningless. No net MRR movement. No board-ready narrative. A junior analyst produced this in 5 minutes.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div>
+    <div class="code">EXEC SNAPSHOT:
+MRR Rs 45L. +9.8% MoM.
+Key concern: 9% churn erasing 40%
+of new revenue every month.
+
+New MRR: +Rs 6.6L (22 customers)
+Churned MRR: -Rs 3.7L (9% of base)
+Net gain: Rs 3.9L
+
+CHURN ALERT:
+9% monthly = 108% annualised churn.
+At this rate we replace our entire
+customer base in under 12 months.
+New acquisition is masking this,
+not solving it.
+
+NRR: ~92%. Benchmark for healthy
+SaaS: 100% minimum.
+
+DECISION NEEDED:
+Is this a product, sales, or CS
+problem? Each needs a different owner.</div>
+    <div class="cc-body"><br><span class="ok">Calculates net MRR correctly. Catches the 9% monthly = 108% annual churn that was being masked. Asks the board for a specific decision. This prevents companies running out of money.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies <strong>SaaS financial analysis frameworks</strong> automatically — the churn alert here is the kind of insight that changes strategic direction.</div></div>
+</section>
+
+<!-- ═══ SKILL 6 ═══ -->
+<section id="s6" class="ss">
+  <div class="ss-head"><p class="ss-num">// 06 of 27</p>
+  <h2 class="ss-name">Contract<br>Reviewer</h2>
+  <span class="ss-badge">Replaces 3M junior legal associates globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p>
+  <p class="prompt-t">"Review this clause: 'All work product, inventions, and deliverables, including all pre-existing tools and methodologies used in creating them, shall be the sole property of Client.'"</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div>
+    <div class="code">This clause addresses IP ownership.
+It states that all work product belongs
+to the client. This is a standard IP
+assignment clause. You should review
+this with a lawyer before signing.</div>
+    <div class="cc-body"><br><span class="bad">Zero analysis. Restates what the clause says. Zero value for a decision-maker. What you get with no framework.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div>
+    <div class="code">RISK RATING: HIGH
+
+CRITICAL ISSUE:
+"including all pre-existing tools and
+methodologies" — this phrase assigns
+YOUR core IP to the client.
+
+What this actually does:
+Every time you use your standard code
+library, AI prompts, or proprietary
+workflow, the client can claim ownership.
+You give away your core IP with every
+engagement that uses these assets.
+
+Market standard:
+Assign work product created for this
+engagement only. Pre-existing IP gets
+a licence grant, not an assignment.
+
+Replace with:
+"...excluding Vendor's pre-existing
+tools and IP, for which Client receives
+a non-exclusive licence to use the
+deliverables."
+
+If they refuse this change, they are
+intentionally trying to capture your
+core IP. That is a reason not to sign.</div>
+    <div class="cc-body"><br><span class="ok">Catches the IP trap in 30 seconds. Provides exact replacement language. Gives the negotiation signal. Saves thousands in legal fees on first pass.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies the <strong>7-area contract review framework</strong>. The pre-existing IP issue here is one of the most common ways vendors unknowingly sign away their core assets. Without this skill it goes unnoticed.</div></div>
+</section>
+
+<!-- ═══ SKILL 7 ═══ -->
+<section id="s7" class="ss">
+  <div class="ss-head"><p class="ss-num">// 07 of 27</p>
+  <h2 class="ss-name">PR and Crisis<br>Communications</h2>
+  <span class="ss-badge">Replaces 500K PR professionals globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p>
+  <p class="prompt-t">"Our app had a data breach. 12,000 users' email and phone numbers were exposed for 6 hours. Write the public statement."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div>
+    <div class="code">We take the security of our users
+very seriously. We recently became
+aware of an incident that may have
+affected some users. We apologize
+for any inconvenience. We will
+provide updates as they are available.
+The [Company] Team</div>
+    <div class="cc-body"><br><span class="bad">"We take security very seriously" is the sentence that tells users you do not. "May have affected some users" — 12,000 were definitely affected. Trust-destroying.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div>
+    <div class="code">Security Incident — What Happened
+
+On [date] at [time IST], we identified
+unauthorised access to a database.
+
+Exposed: email and phone numbers of
+12,000 users. No passwords or payment
+data accessed. Exposure window: 6 hours.
+
+Cause: API authentication misconfiguration.
+Not a sophisticated attack. Our error.
+
+What we did: Issue closed at [time].
+All 12,000 users notified by [time today].
+Independent security audit commissioned.
+Report published by [date].
+
+What to do: Be alert to phishing attempts
+using your email or phone. We will never
+ask for your password by email or SMS.
+
+Contact: security@[company].in
+Next update: [specific time tomorrow]</div>
+    <div class="cc-body"><br><span class="ok">Uses the ACRE framework. States exactly what happened. Explains the cause honestly. Names specific actions with real timelines. Tells users what to do next. Builds trust during a crisis.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies the <strong>ACRE crisis framework</strong> (Acknowledge, Care, Remediate, Ensure) and forces specificity that the standard output entirely avoids.</div></div>
+</section>
+
+<!-- ═══ SKILL 8 ═══ -->
+<section id="s8" class="ss">
+  <div class="ss-head"><p class="ss-num">// 08 of 27</p>
+  <h2 class="ss-name">Content Writer</h2>
+  <span class="ss-badge">Replaces 10M content writers globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p>
+  <p class="prompt-t">"Write the opening of a blog post about AI tools for Indian startups."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div>
+    <div class="code">In today's rapidly evolving digital
+landscape, Indian startups are
+increasingly leveraging artificial
+intelligence tools to enhance their
+operations and remain competitive
+in the modern marketplace. It is
+important to note that AI has become
+a key driver of business transformation.</div>
+    <div class="cc-body"><br><span class="bad">Starts with "In today's rapidly evolving" — the most banned phrase in content. No opinion. No hook. Could be about any topic. Nobody continues reading.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div>
+    <div class="code">In 2022, the average Bangalore startup
+hired 3 people to do what 1 person
+with the right AI stack now does alone.
+
+That is not a prediction. That is what
+already happened to 3 companies I
+audited this quarter.
+
+The founders who figured this out early
+are not working less. They are working
+on different things. Better things.
+
+Here is the exact stack they are using.</div>
+    <div class="cc-body"><br><span class="ok">Specific. Opens with a data point from real experience. Creates a clear reason to keep reading. Has an opinion. Sounds like a person.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill enforces the <strong>5-part article formula</strong> and bans 14 specific AI writing patterns. The result reads like a senior editor wrote it.</div></div>
+</section>
+
+<!-- ═══ SKILL 9 ═══ -->
+<section id="s9" class="ss">
+  <div class="ss-head"><p class="ss-num">// 09 of 27</p>
+  <h2 class="ss-name">Data Entry<br>Processor</h2>
+  <span class="ss-badge">Replaces 15M data entry operators globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p>
+  <p class="prompt-t">"Extract and structure data from this invoice: 'Invoice from Sharma Supplies dated 15/3/26. Items: 50 units widgets at Rs 120 each. 18% GST. Total should be Rs 7080.'"</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div>
+    <div class="code">Vendor: Sharma Supplies
+Date: 15/3/26
+Items: 50 widgets at Rs 120
+GST: 18%
+Total: Rs 7080</div>
+    <div class="cc-body"><br><span class="bad">No validation. Did not check if the total is correct. No error flagging. No structured output format. The error in this invoice goes unnoticed.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div>
+    <div class="code">ENTITY: Sharma Supplies
+DATE: 15/03/2026 [normalised]
+INVOICE DATE: Within 90-day window ✓
+
+LINE ITEMS:
+  Item: Widgets | Qty: 50 | Rate: Rs 120
+  Subtotal: Rs 6,000
+
+GST @ 18%: Rs 1,080
+Calculated total: Rs 7,080
+Stated total: Rs 7,080
+TOTAL MATCH: ✓
+
+VALIDATION FLAGS:
+  ✓ Tax rate valid (18% is a recognised GST rate)
+  ✓ Arithmetic verified
+  [CHECK] Vendor not found in approved list — verify before payment
+  [MISSING] Invoice number not present — request before processing</div>
+    <div class="cc-body"><br><span class="ok">Validates arithmetic. Normalises date format. Flags the missing invoice number and unverified vendor — both fraud risk indicators. The without-skill version would have processed a potentially fraudulent invoice.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies a <strong>5-step validation framework</strong> with mandatory error flags. It catches what humans miss at 2pm on a Friday afternoon.</div></div>
+</section>
+
+<!-- ═══ SKILL 10 ═══ -->
+<section id="s10" class="ss">
+  <div class="ss-head"><p class="ss-num">// 10 of 27</p>
+  <h2 class="ss-name">Social Media<br>Manager</h2>
+  <span class="ss-badge">Replaces 5M social media professionals globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p>
+  <p class="prompt-t">"Write an Instagram caption for a post about AI saving a company time."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div>
+    <div class="code">AI is changing the way we work! 🚀
+Our latest blog post explores how
+artificial intelligence is helping
+companies save time and boost
+productivity. Check it out! Link in
+bio. #AI #Technology #Innovation
+#Business #Productivity #Digital</div>
+    <div class="cc-body"><br><span class="bad">Exclamation mark in line 1. Seven hashtags. "Check it out" as the CTA. No hook. No specific outcome. Nobody stops scrolling for this.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div>
+    <div class="code">3 hours of work. Done in 20 minutes.
+Same output. Same quality. One AI tool.
+
+Here is the exact workflow I used:
+
+1. Claude for the first draft
+2. Perplexity to verify the stats
+3. Canva AI to format the output
+
+The tool did not replace the thinking.
+It removed everything around the thinking.
+
+That is the only part that was
+wasting your day anyway.
+
+Save this for when you need it.
+
+#AITools #BuildInPublic #IndianFounder</div>
+    <div class="cc-body"><br><span class="ok">Hook in first 125 characters. Specific numbers. Numbered steps for saves. Genuine insight in the closing. Three targeted hashtags only. Platform-native.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies <strong>platform-specific rules</strong> — Instagram's 125-character hook window, the 3-to-5 hashtag limit, and the save trigger formula that the algorithm rewards.</div></div>
+</section>
+
+<!-- ═══ SKILLS 11 to 27 — Compact Format ═══ -->
+
+<section id="s11" class="ss">
+  <div class="ss-head"><p class="ss-num">// 11 of 27</p><h2 class="ss-name">Email Copywriter</h2><span class="ss-badge">Replaces 2M email marketing specialists globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p><p class="prompt-t">"Write a re-engagement email for subscribers who have not opened in 60 days."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div><div class="code">Subject: We Miss You!
+Hi there, we noticed you haven't
+opened our emails lately. We have
+lots of great content to share.
+Come back and check out what you've
+been missing! Click here to see
+our latest updates. Best wishes,
+The Team</div><div class="cc-body"><br><span class="bad">"We Miss You" is the most overused re-engagement subject line. "Lots of great content" is vague. "Click here" is the worst CTA text in email marketing.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div><div class="code">Subject: The tool I deleted after 3 days
+Preview: I was wrong about this one.
+
+I told 400 of you to use [Tool].
+I was wrong. Here is what I found
+when I stress-tested it for a week,
+why I deleted it, and the replacement
+that does the same job for free.
+
+If this is not useful to you anymore,
+unsubscribe below. No hard feelings.
+
+[Unsubscribe] — one click, always visible</div><div class="cc-body"><br><span class="ok">Subject line uses the curiosity gap formula. Preview text extends it. Body is honest and specific. The visible unsubscribe link builds more trust than hiding it.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies <strong>6 subject line formulas by email type</strong> and forces honest, specific body copy that treats subscribers as adults.</div></div>
+</section>
+
+<section id="s12" class="ss">
+  <div class="ss-head"><p class="ss-num">// 12 of 27</p><h2 class="ss-name">SEO Content<br>Optimizer</h2><span class="ss-badge">Replaces 1M SEO analysts globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p><p class="prompt-t">"Write a meta title and description for a page about AI tools for Indian startups."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div><div class="code">Title: AI Tools for Indian Startups
+Description: We provide information
+about AI tools that can help Indian
+startups grow their business and
+improve their operations effectively.</div><div class="cc-body"><br><span class="bad">Generic title. No differentiator. Description is 163 characters and says nothing. No call to action. Will not rank or get clicked.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div><div class="code">Title: Best AI Tools for Indian Startups
+in 2026 — Tested and Ranked | RSB
+[58 chars — within limit ✓]
+
+Description: 12 AI tools tested on real
+Indian startup workflows. Ranked by ROI,
+not hype. Cut your operational costs by
+30% in the first 30 days. [154 chars ✓]
+
+Primary keyword: first 40 chars ✓
+CTA present: yes ✓
+Benefit stated: yes (30% cost cut) ✓</div><div class="cc-body"><br><span class="ok">Keyword in first 40 characters. Differentiator (tested and ranked). Specific benefit stated. Within character limits. Validation checklist completed automatically.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies <strong>on-page optimisation rules</strong> with automatic character count validation and a checklist of ranking signals that generic output misses entirely.</div></div>
+</section>
+
+<section id="s13" class="ss">
+  <div class="ss-head"><p class="ss-num">// 13 of 27</p><h2 class="ss-name">Meeting<br>Summarizer</h2><span class="ss-badge">Replaces 8M admins and EAs globally for meeting documentation</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p><p class="prompt-t">"Summarize this meeting: We discussed the Q2 launch. Priya said the design is delayed. Ravi said he needs the copy by Friday. No decision on pricing yet."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div><div class="code">Meeting Summary:
+The team discussed the Q2 launch.
+Design is delayed. Copy is needed
+by Friday. Pricing was not decided.</div><div class="cc-body"><br><span class="bad">Restates what was said. No owners. No deadlines. No flags. No follow-up email. Useless for accountability.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div><div class="code">IN ONE LINE: Q2 launch at risk due to
+design delay. Copy unblocks next step.
+
+DECISIONS MADE: None this session.
+
+ACTION ITEMS:
+Ravi → Deliver copy → Friday [date]
+[UNCLEAR — Design delay: owner not named,
+no deadline stated. Needs clarification.]
+
+ITEMS DEFERRED:
+Pricing — reason: dependency on design
+Review date: [set explicitly]
+
+FOLLOW-UP EMAIL: Drafted and ready.
+
+FLAGS:
+Pricing decision has no owner or date.
+Design delay has no named resolution.
+Both will block the Q2 launch.</div><div class="cc-body"><br><span class="ok">Every action item has an owner and deadline. Flags incomplete items explicitly. Identifies the two blockers that will cause the launch to slip. Produces a follow-up email automatically.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill enforces the <strong>three-component action item rule</strong> (what, who, when) and flags incomplete decisions that would otherwise become arguments two weeks later.</div></div>
+</section>
+
+<section id="s14" class="ss">
+  <div class="ss-head"><p class="ss-num">// 14 of 27</p><h2 class="ss-name">Accounts Payable<br>Handler</h2><span class="ss-badge">Replaces 10M AP clerks and finance admins globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p><p class="prompt-t">"A vendor is chasing payment for invoice #4521 of Rs 85,000. Write the response."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div><div class="code">Dear Vendor,
+Thank you for reaching out. We will
+look into your payment and get back
+to you as soon as possible.
+Best regards, Finance Team</div><div class="cc-body"><br><span class="bad">No status. No timeline. No specific person. The vendor has to chase again in 3 days. This is the response that damages vendor relationships.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div><div class="code">Hi [Name],
+Invoice #4521 for Rs 85,000 dated
+[date] — status:
+
+Approved. Payment processing via NEFT.
+Expected credit: [specific date].
+Reference: [UTR will be sent separately]
+
+If this does not arrive by [date + 2]:
+Reply to this email with your bank's
+non-receipt confirmation and we will
+initiate a trace within 24 hours.
+
+[Name], AP Team</div><div class="cc-body"><br><span class="ok">Specific invoice reference. Exact payment date. UTR promised. Clear escalation path if payment does not arrive. One response closes the chase permanently.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies the <strong>AP response formula by query type</strong> and the Indian-specific GST and NEFT/RTGS conventions that generic output ignores.</div></div>
+</section>
+
+<section id="s15" class="ss">
+  <div class="ss-head"><p class="ss-num">// 15 of 27</p><h2 class="ss-name">Bid and Proposal<br>Writer</h2><span class="ss-badge">Replaces 1.5M bid writers globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p><p class="prompt-t">"Write the executive summary for a bid to provide IT support services for a government department. 3-year contract, Rs 2 crore."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div><div class="code">We are pleased to submit our proposal
+for IT support services. Our company
+has extensive experience in providing
+high-quality IT solutions. We are
+committed to delivering excellent
+service and meeting all requirements.
+We look forward to this opportunity.</div><div class="cc-body"><br><span class="bad">Zero specifics. Zero proof. Zero differentiation. Could have been written by any of the 40 other bidders. Eliminated at first read.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div><div class="code">[Department] needs IT support that
+does not fail during peak demand.
+The real challenge is not the ticket
+volume — it is the 73-minute average
+resolution time your current team
+experiences on P1 incidents.
+
+[Company] proposes a 3-year managed
+IT support engagement at Rs 2 crore.
+
+We have delivered the same scope for
+[similar government department] since
+2023, achieving 94% first-call resolution
+and 28-minute mean P1 resolution time.
+
+We are the only bidder with an active
+government IT contract of this scale.
+
+Investment: Rs 2 crore over 3 years.
+Start date available: [date].
+Month 1 milestone: [specific deliverable].</div><div class="cc-body"><br><span class="ok">Names the real problem behind the stated requirement. Leads with the comparable project. States the specific outcome. Names the differentiator. A real executive summary.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill forces the executive summary to answer <strong>three evaluator questions</strong>: will this work, will these people deliver, is this worth funding over others.</div></div>
+</section>
+
+<section id="s16" class="ss">
+  <div class="ss-head"><p class="ss-num">// 16 of 27</p><h2 class="ss-name">Performance<br>Review Writer</h2><span class="ss-badge">Replaces 5M managers doing review documentation globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p><p class="prompt-t">"Write a performance review for Anjali, a marketing manager who had a good year but missed one major campaign deadline."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div><div class="code">Anjali is a great team player with
+a positive attitude. She works hard
+and delivers good results most of the
+time. She could improve her time
+management skills going forward.</div><div class="cc-body"><br><span class="bad">No specific outcome. "Positive attitude" and "great team player" are personality claims, not observed behaviours. Not legally defensible. Useless for a promotion or PIP.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div><div class="code">OVERALL: Meets expectations.
+
+ACHIEVEMENTS:
+1. Led the Diwali campaign that generated
+   Rs 4.2Cr in attributed revenue —
+   12% above the Rs 3.75Cr target.
+2. Reduced agency briefing cycle from
+   14 days to 6 by introducing the
+   campaign brief template now used
+   across the full team.
+
+DEVELOPMENT AREA:
+The Q3 product launch campaign missed
+the 15 September deadline by 9 days.
+The delay was caused by late stakeholder
+approval cycles that were not escalated
+early enough. Going forward: escalate
+any approval delay past day 3.
+
+GOAL FOR NEXT YEAR:
+Deliver the Q1 brand refresh on schedule
+with a documented approval checkpoint
+at each stage. Measure: zero delays
+past 48 hours without escalation logged.</div><div class="cc-body"><br><span class="ok">Specific outcomes with rupee amounts. Observed behaviour, not personality. Development area names the specific event, the root cause, and the corrective action. Legally defensible.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill enforces the <strong>two rules of performance reviews</strong>: specific behaviour or outcome only, and every claim must have a number or example behind it.</div></div>
+</section>
+
+<section id="s17" class="ss">
+  <div class="ss-head"><p class="ss-num">// 17 of 27</p><h2 class="ss-name">Technical Writer</h2><span class="ss-badge">Replaces 500K technical writers globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p><p class="prompt-t">"Write Step 1 of an SOP for processing a vendor payment in our accounting software."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div><div class="code">Step 1: Log in to the accounting
+software and navigate to the payments
+section where you can find the option
+to process vendor payments and enter
+the relevant information.</div><div class="cc-body"><br><span class="bad">Two actions in one step. No expected result. No troubleshooting. A first-time user reading this step has no way to know if they did it correctly.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div><div class="code">Step 1: Log in to [Software name]
+Action: Open [url] and enter your
+credentials. Click Sign In.
+
+What you should see: The Dashboard
+screen with your company name in the
+top-right corner.
+
+If you see "Invalid credentials":
+Check that Caps Lock is off.
+Use the Forgot Password link if the
+issue persists.
+Contact [name] at [email] if your
+account is locked.
+
+Do not proceed to Step 2 until you
+see the Dashboard screen.</div><div class="cc-body"><br><span class="ok">One action per step. Expected result stated. Troubleshooting for the most common error. Explicit stop condition before proceeding. A first-time user can follow this alone.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies the <strong>SOP formula</strong> with mandatory expected result and troubleshooting for every step — the two things that turn documentation from reference material into a usable guide.</div></div>
+</section>
+
+<section id="s18" class="ss">
+  <div class="ss-head"><p class="ss-num">// 18 of 27</p><h2 class="ss-name">Training<br>Developer</h2><span class="ss-badge">Replaces 1M L&D professionals globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p><p class="prompt-t">"Write a learning objective for a customer service training on handling refund requests."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div><div class="code">By the end of this training, participants
+will understand how to handle refund
+requests and improve their customer
+service skills in refund situations.</div><div class="cc-body"><br><span class="bad">"Understand" cannot be observed or tested. "Improve their skills" is unmeasurable. You cannot assess whether this objective was met. The training has no clear success criteria.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div><div class="code">By the end of this module, the learner
+will be able to:
+
+1. APPLY the 5-type refund classification
+   system to correctly categorise any
+   incoming refund request within 60 seconds.
+
+2. EXECUTE the correct response formula
+   for each refund type without referencing
+   the guide (memorised through 3 practice
+   simulations).
+
+3. DECIDE independently when to make a
+   policy exception and justify the decision
+   using the escalation decision tree.
+
+Assessment: 3 role-play scenarios scored
+against the response rubric. Pass mark: 80%.</code></div>
+    <div class="cc-body"><br><span class="ok">Uses observable Bloom's taxonomy verbs. Each objective is measurable. Assessment method is specified. A trainer and learner both know exactly what success looks like.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies <strong>Bloom's Taxonomy verb selection</strong> — the difference between "understand" (untestable) and "apply" (observable) is what separates effective training from compliance theatre.</div></div>
+</section>
+
+<section id="s19" class="ss">
+  <div class="ss-head"><p class="ss-num">// 19 of 27</p><h2 class="ss-name">Executive<br>Communicator</h2><span class="ss-badge">Replaces 500K executive comms professionals globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p><p class="prompt-t">"The board needs to approve a Rs 50L budget increase for the engineering team. Write the board paper recommendation."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div><div class="code">We would like to request the board's
+consideration for a budget increase
+of Rs 50 lakhs for the engineering
+team. This will help us improve our
+product and better serve customers.
+We believe this is important for our
+growth. We look forward to your
+thoughts and feedback on this matter.</div><div class="cc-body"><br><span class="bad">Passive opener. No recommendation stated. No business case. No alternatives considered. No risk flagged. A board cannot make a decision from this.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div><div class="code">RECOMMENDATION:
+The board is asked to approve an
+additional engineering budget of
+Rs 50 lakhs for FY2026-27.
+
+WHAT THIS UNLOCKS:
+Hiring 4 senior engineers who unblock
+the payments feature delayed since Q2.
+Estimated revenue impact: Rs 1.8Cr ARR
+at current conversion rates.
+
+ALTERNATIVES CONSIDERED:
+Option A: Hire 2 senior engineers (Rs 25L)
+— Delays feature by further 6 months.
+Option B: Outsource (Rs 35L)
+— Quality risk given core product impact.
+Recommended: Option C (Rs 50L in-house)
+
+RISK OF NOT APPROVING:
+Competitor [X] shipped equivalent
+feature in Q3. Each month of delay
+costs an estimated Rs 15L in lost deals.
+
+Decision required: Y/N on Rs 50L budget.</div><div class="cc-body"><br><span class="ok">Recommendation first. Business case with revenue impact. Alternatives documented. Risk of inaction quantified. Board knows what they are voting on.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill enforces the <strong>board paper formula</strong> — recommendation always first, alternatives always documented, risk of inaction always quantified.</div></div>
+</section>
+
+<section id="s20" class="ss">
+  <div class="ss-head"><p class="ss-num">// 20 of 27</p><h2 class="ss-name">Policy Drafter</h2><span class="ss-badge">Replaces 2M policy writers and compliance officers globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p><p class="prompt-t">"Write the policy statement section for a remote work policy."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div><div class="code">Employees are expected to maintain
+productivity while working remotely.
+They should be available during normal
+working hours and communicate regularly
+with their team. Remote work is subject
+to management approval.</div><div class="cc-body"><br><span class="bad">"Expected to maintain productivity" is unenforceable. "Normal working hours" is undefined. "Communicate regularly" means nothing. Every sentence requires interpretation.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div><div class="code">POLICY STATEMENT:
+
+1. Eligible employees must be available
+   via [communication tool] between
+   10:00 and 16:00 IST on working days.
+   Response time to messages: within
+   2 hours during core hours.
+
+2. Employees must attend all scheduled
+   meetings unless approved absence
+   is logged in [calendar system] before
+   the meeting start time.
+
+3. Remote work arrangements must be
+   approved in writing by the employee's
+   direct manager before commencement.
+   Approval is granted per quarter and
+   renewed based on performance.
+
+4. The company retains the right to
+   require on-site attendance with
+   72 hours notice for any reason.
+
+Breach: Failure to comply with items 1
+to 4 constitutes a performance matter
+managed under the Disciplinary Policy.</div><div class="cc-body"><br><span class="ok">Every rule uses "must" — mandatory and clear. Response times are specific. Approval process has a named mechanism. Breach consequences reference the correct policy. Enforceable from day one.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies the <strong>language rules</strong>: "must" for mandatory, "may" for discretionary, and specificity requirements that make every rule independently understandable and enforceable.</div></div>
+</section>
+
+<section id="s21" class="ss">
+  <div class="ss-head"><p class="ss-num">// 21 of 27</p><h2 class="ss-name">Competitive Intel<br>Reporter</h2><span class="ss-badge">Replaces 500K competitive intelligence analysts globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p><p class="prompt-t">"We lost a deal to Zoho last week. Write the win/loss analysis."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div><div class="code">We lost this deal to Zoho because they
+have better brand recognition and a
+lower price point. We need to improve
+our positioning and sales process to
+win against them in the future.</div><div class="cc-body"><br><span class="bad">Vague. No decision factors. No pattern identification. No specific action. This analysis teaches the sales team nothing they did not already know.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div><div class="code">DEAL: [Ref] | Lost to Zoho | Rs [X]
+
+DECISION FACTORS (buyer-ranked):
+1. Price: Zoho quoted 40% lower — WORSE
+2. Integration: our Tally integration
+   was not ready — WORSE
+3. Support SLA: ours was better — BETTER
+4. UI/UX: buyer preferred theirs — EQUAL
+
+PRIMARY LOSS REASON (one sentence):
+Lost because our Tally integration
+was on a Q3 roadmap they could not wait for.
+
+WHAT WE COULD HAVE DONE:
+Offered a manual Tally workaround
+as a bridge — we did not raise it.
+
+PATTERN ALERT (3rd similar deal):
+Three losses to Zoho in 60 days have
+all cited the Tally integration gap.
+This is now a product priority decision,
+not a sales problem.
+
+ACTION: Escalate to product within 48 hours.</div><div class="cc-body"><br><span class="ok">Decision factors ranked by buyer. One-sentence primary loss reason. Process failure identified. Pattern detection across deals. Specific escalation action. The sales team knows what to do differently.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies the <strong>win/loss format with pattern detection</strong> — three identical losses produce a product escalation, not just a sales coaching note.</div></div>
+</section>
+
+<section id="s22" class="ss">
+  <div class="ss-head"><p class="ss-num">// 22 of 27</p><h2 class="ss-name">Customer Onboarding<br>Writer</h2><span class="ss-badge">Replaces 2M customer success specialists globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p><p class="prompt-t">"Write the Day 0 welcome email for a new SaaS customer."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div><div class="code">Subject: Welcome to [Product]!
+Hi [Name], welcome to [Product]!
+We are so excited to have you on board.
+Please explore our platform and reach
+out if you need any help. We hope
+you enjoy using [Product]!
+Best, The [Product] Team</div><div class="cc-body"><br><span class="bad">No first action. No path to value. No specific outcome. The customer opens this, closes it, and never logs in again. This is why SaaS products have 60% day-7 churn.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div><div class="code">Subject: You are in. Here is how to get
+value in the next 10 minutes.
+
+Hi [Name], your account is live.
+
+The one thing that gets customers to
+their first win fastest:
+Connect your Razorpay account under
+Settings > Integrations. Takes 4 minutes.
+
+After that, your payment dashboard
+populates with the last 90 days of data
+automatically. Most people call this
+the moment it clicks.
+
+Stuck: [email] — we reply in 2 hours.
+
+[Name]
+[Product] — your account manager
+
+P.S. I will check in on Day 2 to see
+if you got there.</div><div class="cc-body"><br><span class="ok">Single most impactful first action named. Time estimate given. Expected result described. Real support contact. P.S. sets up the Day 2 email. Conversion to active user: 3x higher.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies the <strong>Day 0 to 30 onboarding sequence</strong> — every email has a specific job. The Day 0 email's only job is to get one action completed in the first 10 minutes.</div></div>
+</section>
+
+<section id="s23" class="ss">
+  <div class="ss-head"><p class="ss-num">// 23 of 27</p><h2 class="ss-name">Product Description<br>Writer</h2><span class="ss-badge">Replaces 3M ecommerce copywriters globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p><p class="prompt-t">"Write a product description for a Rs 3500 wireless keyboard for professionals."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div><div class="code">Premium wireless keyboard with
+advanced features. High quality
+construction ensures durability.
+Bluetooth connectivity. Compatible
+with multiple devices. Perfect for
+professionals. Rs 3,500.</div><div class="cc-body"><br><span class="bad">"Premium quality" and "advanced features" are meaningless without proof. No specific benefit stated. No outcome described. Not one reason to choose this over any other keyboard.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div><div class="code">You type for 8 hours a day. Most keyboards
+are not built for that. This one is.
+
+The [Model] connects to 3 devices
+simultaneously — switch from laptop to
+tablet to phone with one key press.
+Battery lasts 6 months per charge.
+Low-profile keys reduce wrist strain
+after the third hour.
+
+Used by: developers, writers, and
+anyone whose hands spend more time on
+a keyboard than anywhere else.
+
+Rs 3,500. Ships in 2 days.
+30-day return if it does not feel right.
+
+Feature breakdown:
+Bluetooth 5.0 — connects to 3 devices
+Battery: 6 months on 2 AAA batteries
+Key travel: 1.8mm (comfortable for speed typing)
+Compatibility: Windows, macOS, iOS, Android</div><div class="cc-body"><br><span class="ok">Opens with the customer's situation. Names the outcome before the feature. Specific use case. Specific battery life. Risk removal with return policy. Features appear after the story, not instead of it.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies the <strong>5-level product description hierarchy</strong> — hook, promise, proof, specifics, remove doubt. Features appear in level 4, not level 1.</div></div>
+</section>
+
+<section id="s24" class="ss">
+  <div class="ss-head"><p class="ss-num">// 24 of 27</p><h2 class="ss-name">Grant Proposal<br>Writer</h2><span class="ss-badge">Replaces 1M grant writers globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p><p class="prompt-t">"Write the problem statement for a grant proposal to fund AI skill training for rural Indian women."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div><div class="code">AI skills are increasingly important
+in today's world. Rural women in India
+face many challenges in accessing
+quality education and technology.
+This project aims to bridge the
+digital divide and create opportunities
+for women in rural areas.</div><div class="cc-body"><br><span class="bad">No numbers. No specific geography. "Many challenges" and "digital divide" are generic phrases that appear in 80% of rejected proposals. No evidence base. Not fundable.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div><div class="code">47 million women in rural India are
+employed in agriculture or informal
+work that pays below minimum wage.
+
+By 2028, 23 million of these roles will
+be eliminated or significantly altered
+by automation (NITI Aayog, 2025).
+Of the women whose roles will change,
+less than 4% currently have access to
+digital skills training in their district.
+
+Current government programmes reach
+urban centres. The Pradhan Mantri
+Kaushal Vikas Yojana has zero active
+centres in the 6 districts this proposal
+covers. No private programme operates
+below Rs 8,000 per participant in this
+geography — above what target households
+earn monthly.
+
+If nothing changes, 1.2 million women
+in these 6 districts face income loss
+with no retraining pathway by 2028.</div><div class="cc-body"><br><span class="ok">Specific number of affected people. Cited data source. Gap in current provision documented. Geographic specificity. Cost barrier quantified. Consequence of inaction stated. This is a funded proposal.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies the <strong>problem statement formula</strong>: specific affected population, data source cited, gap in current provision documented, consequence of inaction quantified.</div></div>
+</section>
+
+<section id="s25" class="ss">
+  <div class="ss-head"><p class="ss-num">// 25 of 27</p><h2 class="ss-name">Compliance<br>Reporter</h2><span class="ss-badge">Replaces 2M compliance officers globally for report generation</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p><p class="prompt-t">"Write a compliance finding for a fintech that has not filed its GSTR-3B for 2 months."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div><div class="code">Finding: GST Compliance Issue
+The company has not filed GSTR-3B
+for two months. This needs to be
+addressed urgently. Non-compliance
+with GST requirements could result
+in penalties. Recommend immediate
+action to resolve this matter.</div><div class="cc-body"><br><span class="bad">No finding ID. No classification. No specific regulation cited. No penalty calculated. No owner named. "Immediate action" is not an action. A board cannot act on this.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div><div class="code">FINDING ID: F-GST-2026-004
+CLASSIFICATION: HIGH
+
+REGULATION: CGST Act 2017, Section 39
+Late filing creates interest liability
+at 18% per annum on tax payable.
+
+FINDING:
+GSTR-3B not filed for [Month 1] and
+[Month 2]. Deadline was 20th of each
+month. Current delay: [X] days.
+
+FINANCIAL EXPOSURE:
+Tax payable (est.): Rs [X]
+Interest accruing daily: Rs [X]
+Late fees after 15 days: Rs 50/day
+
+RECOMMENDATION:
+File both returns within 48 hours.
+Settle interest simultaneously.
+
+OWNER: CFO
+DEADLINE: [Date 48 hours from today]
+STATUS: Open</div><div class="cc-body"><br><span class="ok">Specific regulation with section number. Financial exposure calculated daily. Named owner. 48-hour deadline. Structured finding ID for audit trail. The board knows the cost and who fixes it.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies the <strong>finding classification system</strong> and forces financial quantification — every compliance issue has a rupee cost attached so the board can prioritise correctly.</div></div>
+</section>
+
+<section id="s26" class="ss">
+  <div class="ss-head"><p class="ss-num">// 26 of 27</p><h2 class="ss-name">Internal Newsletter<br>Writer</h2><span class="ss-badge">Replaces 1M internal comms professionals globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p><p class="prompt-t">"Write the opening of an internal newsletter announcing that the company had a strong quarter."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div><div class="code">Dear Team,
+We are pleased to share that we had
+a very strong quarter! Thanks to your
+hard work and dedication, we have
+achieved some amazing results. We
+are so proud of everything the team
+has accomplished. Keep up the great work!</div><div class="cc-body"><br><span class="bad">"Very strong quarter" — what does that mean? Employees get this email weekly from companies that are about to lay off 20% of the team. No numbers. No trust.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div><div class="code">Revenue hit Rs 4.2Cr in Q3.
+That is 18% above Q2 and 31% above
+where we were this time last year.
+
+Here is what actually drove it:
+The payments feature that shipped in
+July contributed Rs 80L in new ARR.
+The enterprise deal Priya closed in
+September was the largest single
+contract in company history — Rs 1.1Cr.
+
+What this means for the team:
+The annual variable payout triggers
+at Rs 3.8Cr. We crossed it in week 11
+of 12. Details from HR by Friday.
+
+The one thing that concerns me:
+Churn in the SMB segment ticked up
+to 11% in September. I want to talk
+about this at the all-hands on Monday.</div><div class="cc-body"><br><span class="ok">Specific number in first sentence. Named the drivers. Named the people. Connected to employee outcome (variable payout). Included an honest concern. Employees will actually read this.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill enforces the core principle: <strong>honest beats polished</strong>. The concern in the last paragraph builds more trust than removing it would. Employees who understand the business perform better.</div></div>
+</section>
+
+<section id="s27" class="ss">
+  <div class="ss-head"><p class="ss-num">// 27 of 27</p><h2 class="ss-name">LinkedIn<br>Ghostwriter</h2><span class="ss-badge">Replaces 2M LinkedIn content creators and ghostwriters globally</span></div>
+  <div class="prompt"><p class="prompt-l">// Same prompt</p><p class="prompt-t">"Write a LinkedIn post for a founder about how AI saved them time this week."</p></div>
+  <div class="cg">
+    <div class="cc b"><div class="cc-label"><div class="dot"></div>Without Skill</div><div class="code">AI is amazing! This week I used AI
+tools to save a lot of time in my
+business. It's incredible how
+technology is changing the way we
+work. If you haven't started using
+AI yet, you should definitely try it!
+#AI #Entrepreneur #Productivity</div><div class="cc-body"><br><span class="bad">Vague. Exclamation marks. "A lot of time" is unmeasurable. No hook. Sounds like an ad, not a person. Nobody engages with this.</span></div></div>
+    <div class="cc a"><div class="cc-label"><div class="dot"></div>With Skill</div><div class="code">Tuesday. 6pm. I had 4 hours of writing
+left and a dinner I was not going to miss.
+
+Used Claude for the first draft.
+Used Perplexity to verify the stats.
+Used Canva AI to format the output.
+
+Done by 6:45.
+
+The tools did not replace the thinking.
+They removed everything around the thinking.
+That was the only part wasting my day.
+
+Which part of your day could disappear
+if the right tool was pointed at it?
+
+#BuildInPublic #AITools #IndianFounder</div><div class="cc-body"><br><span class="ok">Opens mid-scene with a specific moment. Numbers (4 hours, 6pm, 6:45). Named tools. Genuine insight in the closing line. Question drives comments. No adjectives that do not earn their place.</span></div></div>
+  </div>
+  <div class="why"><div class="why-icon">→</div><div class="why-t">The skill applies the <strong>voice capture protocol and 7-post type system</strong> — this is the Story Post format with a specific time, specific tools, and a question that generates replies rather than passive likes.</div></div>
+</section>
+
+<footer>
+  <div class="f-name">RSB<span>.</span></div>
+  <p class="f-sub">Rishik Sai B &nbsp; AI Entrepreneur Building In Public &nbsp; Hyderabad</p>
+  <p class="f-note">All 27 skills are available as SKILL.md files for Claude.<br>GitHub repo and Google Drive folder link at <strong>@rishiksaib</strong> on LinkedIn.</p>
+</footer>
+</body>
+</html>
